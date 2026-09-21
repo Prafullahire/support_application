@@ -1,0 +1,106 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --background: #f5f5f5;
+  --foreground: #0a0a0a;
+  --primary: #dc2626;
+  --primary-dark: #b91c1c;
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --card: #ffffff;
+  --border: #e5e5e5;
+  --muted: #737373;
+  --portal-red: #ed1819;
+  --portal-green: #0d955a;
+  --portal-grey: #737373;
+  --portal-border: #edf1f3;
+  --portal-card: #fcfcfc;
+}
+
+.font-portal {
+  font-family: var(--font-portal), system-ui, sans-serif;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer components {
+  .page-title {
+    @apply text-2xl font-bold text-brand-black;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-text-muted;
+  }
+
+  .stat-card {
+    @apply rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:border-brand-red/30 hover:shadow-md;
+  }
+
+  .table-header {
+    @apply border-b border-gray-100 text-left text-xs font-semibold uppercase tracking-wide text-text-muted;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  }
+
+  .gradient-sidebar {
+    background: linear-gradient(180deg, #0a0a0a 0%, #171717 50%, #262626 100%);
+  }
+
+  .auth-gradient {
+    background: linear-gradient(135deg, #0a0a0a 0%, #171717 60%, #dc2626 100%);
+  }
+
+  .portal-gradient {
+    background: linear-gradient(145deg, #f01a19 0%, #c41414 28%, #1a1a1a 72%, #0a0a0a 100%);
+  }
+
+  .portal-card-shadow {
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.12);
+  }
+
+  .brand-gradient {
+    background: linear-gradient(
+      160deg,
+      #120303 0%,
+      #2b0303 22%,
+      #8f0f0f 55%,
+      #c81e1e 78%,
+      #2b0303 100%
+    );
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #d8d3d0;
+    border-radius: 999px;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8f0f0f;
+}
