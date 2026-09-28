@@ -39,5 +39,8 @@ export default async function handler(req: any, res: any) {
     await createNestServer(server);
     isReady = true;
   }
+  if (req.url && req.url.startsWith('/api/backend')) {
+    req.url = req.url.replace('/api/backend', '');
+  }
   server(req, res);
 }
