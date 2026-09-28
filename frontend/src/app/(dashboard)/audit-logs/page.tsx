@@ -124,7 +124,7 @@ export default function AuditLogsPage() {
                 }
               />
               <DetailField label="Details" value={modal.selected.details} />
-              <DetailField label="Date" value={formatDate(modal.selected.createdAt)} />
+              <DetailField label="Date" value={modal.selected.createdAt ? formatDate(modal.selected.createdAt) : '-'} />
             </DetailView>
           )}
         </Modal>

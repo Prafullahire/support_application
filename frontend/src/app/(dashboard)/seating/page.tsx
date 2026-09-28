@@ -252,7 +252,7 @@ export default function SeatingPage() {
               value={modal.selected.totalSeats - modal.selected.occupiedSeats}
             />
             <DetailField label="Branch" value={modal.selected.branch?.name} />
-            <DetailField label="Date" value={formatDate(modal.selected.recordDate)} />
+            <DetailField label="Date" value={modal.selected.recordDate ? formatDate(modal.selected.recordDate) : '-'} />
           </DetailView>
         )}
       </Modal>

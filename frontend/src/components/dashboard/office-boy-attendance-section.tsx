@@ -471,7 +471,7 @@ export function OfficeBoyAttendanceSection() {
               <tbody>
                 {pagination.paginatedItems.map((row) => (
                   <tr key={row.id} className="border-t border-neutral-100 hover:bg-neutral-50/50">
-                    <td className="px-4 py-3 font-medium">{formatDate(row.attendanceDate)}</td>
+                    <td className="px-4 py-3 font-medium">{row.attendanceDate ? formatDate(row.attendanceDate) : '—'}</td>
                     <td className="px-4 py-3">
                       <p>{row.staffName || '—'}</p>
                       <p className="text-xs text-neutral-500">{row.staffEmployeeId || ''}</p>

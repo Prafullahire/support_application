@@ -230,7 +230,7 @@ export default function JoiningKitPage() {
                     <td className="py-3 pr-4 text-black font-medium">{i.issueNumber}</td>
                     <td className="py-3 pr-4 text-neutral-600">{i.employeeName} ({i.employeeId})</td>
                     <td className="py-3 pr-4 text-neutral-600">{i.branch?.name} - {i.location}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(i.joiningDate)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{i.joiningDate ? formatDate(i.joiningDate) : '-'}</td>
                     <td className="py-3 pr-4">
                       {i.isReturned ? (
                         <Badge status="RETURNED" />

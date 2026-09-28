@@ -171,7 +171,7 @@ export default function NotificationsPage() {
             <DetailField label="Type" value={<Badge status={modal.selected.type} />} />
             <DetailField label="Message" value={modal.selected.message} />
             <DetailField label="Read" value={modal.selected.isRead ? 'Yes' : 'No'} />
-            <DetailField label="Date" value={formatDate(modal.selected.createdAt)} />
+            <DetailField label="Date" value={modal.selected.createdAt ? formatDate(modal.selected.createdAt) : '-'} />
           </DetailView>
         )}
       </Modal>

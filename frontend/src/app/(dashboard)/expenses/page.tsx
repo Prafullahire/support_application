@@ -402,7 +402,7 @@ export default function ExpensesPage() {
             <DetailField label="Branch" value={modal.selected.branch?.name} />
             <DetailField label="Category" value={modal.selected.category?.name} />
             <DetailField label="Vendor" value={modal.selected.vendor?.name} />
-            <DetailField label="Date" value={formatDate(modal.selected.expenseDate)} />
+            <DetailField label="Date" value={modal.selected.expenseDate ? formatDate(modal.selected.expenseDate) : '-'} />
             <DetailField label="Invoice" value={modal.selected.invoiceUrl ? <a href={modal.selected.invoiceUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 underline">View Invoice</a> : '-'} />
             <DetailField
               label="Created By"

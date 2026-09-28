@@ -216,7 +216,7 @@ export default function RequestsPage() {
               }
             />
             <DetailField label="Branch" value={modal.selected.branch?.name} />
-            <DetailField label="Created At" value={formatDate(modal.selected.createdAt)} />
+            <DetailField label="Created At" value={modal.selected.createdAt ? formatDate(modal.selected.createdAt) : '-'} />
           </DetailView>
         )}
       </Modal>

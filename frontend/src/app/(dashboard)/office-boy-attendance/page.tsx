@@ -434,7 +434,7 @@ export default function OfficeBoyAttendancePage() {
                 {pagination.paginatedItems.map((row) => (
                   <tr key={row.id} className="border-t border-neutral-100 hover:bg-neutral-50/50">
                     <td className="px-4 py-3 font-medium text-black">
-                      {formatDate(row.attendanceDate)}
+                      {row.attendanceDate ? formatDate(row.attendanceDate) : '—'}
                     </td>
                     <td className="px-4 py-3">{row.staffName || '—'}</td>
                     <td className="px-4 py-3">{row.staffEmployeeId || '—'}</td>

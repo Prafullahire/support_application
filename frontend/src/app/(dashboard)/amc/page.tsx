@@ -220,8 +220,8 @@ export default function AmcPage() {
             <DetailField label="Title" value={modal.selected.title} />
             <DetailField label="Vendor" value={modal.selected.vendor?.name} />
             <DetailField label="Branch" value={modal.selected.branch?.name} />
-            <DetailField label="Start Date" value={formatDate(modal.selected.startDate)} />
-            <DetailField label="End Date" value={formatDate(modal.selected.endDate)} />
+            <DetailField label="Start Date" value={modal.selected.startDate ? formatDate(modal.selected.startDate) : '-'} />
+            <DetailField label="End Date" value={modal.selected.endDate ? formatDate(modal.selected.endDate) : '-'} />
             <DetailField
               label="Amount"
               value={modal.selected.amount ? formatCurrency(modal.selected.amount) : '-'}

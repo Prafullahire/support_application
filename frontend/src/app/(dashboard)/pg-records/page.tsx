@@ -242,8 +242,8 @@ export default function PgRecordsPage() {
             <DetailField label="Branch" value={modal.selected.branch?.name || '-'} />
             <DetailField label="Address" value={modal.selected.address} />
             <DetailField label="Rent Amount" value={formatCurrency(modal.selected.rentAmount)} />
-            <DetailField label="Agreement Start" value={formatDate(modal.selected.agreementStart)} />
-            <DetailField label="Agreement End" value={formatDate(modal.selected.agreementEnd)} />
+            <DetailField label="Agreement Start" value={modal.selected.agreementStart ? formatDate(modal.selected.agreementStart) : '-'} />
+            <DetailField label="Agreement End" value={modal.selected.agreementEnd ? formatDate(modal.selected.agreementEnd) : '-'} />
             <DetailField label="Contact Phone" value={modal.selected.contactPhone || '-'} />
             <DetailField label="Email Reminder" value={`${modal.selected.reminderDays ?? 5} days before expiry`} />
             <DetailField label="Status" value={<Badge status={modal.selected.status} />} />
@@ -256,7 +256,7 @@ export default function PgRecordsPage() {
                   : '-'
               }
             />
-            <DetailField label="Created At" value={formatDate(modal.selected.createdAt)} />
+            <DetailField label="Created At" value={modal.selected.createdAt ? formatDate(modal.selected.createdAt) : '-'} />
           </DetailView>
         )}
       </Modal>

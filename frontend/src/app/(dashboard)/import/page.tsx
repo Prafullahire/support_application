@@ -149,7 +149,7 @@ export default function ImportPage() {
                       <td className="py-3 pr-4 text-neutral-600">{job.fileName || '-'}</td>
                       <td className="py-3 pr-4"><Badge status={job.status} /></td>
                       <td className="py-3 pr-4 text-neutral-600">{job.recordsProcessed ?? '-'}</td>
-                      <td className="py-3 text-neutral-600">{formatDate(job.createdAt)}</td>
+                      <td className="py-3 text-neutral-600">{job.createdAt ? formatDate(job.createdAt) : '-'}</td>
                     </tr>
                   ))}
                 </tbody>
