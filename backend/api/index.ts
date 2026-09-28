@@ -35,16 +35,29 @@ async function createNestServer(expressInstance: express.Express) {
 let isReady = false;
 
 export default async function handler(req: any, res: any) {
-  if (!isReady) {
-    await createNestServer(server);
-    isReady = true;
-  }
-  if (req.url) {
-    if (req.url.startsWith('/api/backend')) {
-      req.url = req.url.replace('/api/backend', '');
-    } else if (req.url.startsWith('/backend/api')) {
-      req.url = req.url.replace('/backend/api', '');
+  try {
+    if (!isReady) {
+      await createNestServer(server);
+      isReady = true;
+    }
+
+    if (req.url) {
+      if (req.url.startsWith('/api/backend')) {
+        req.url = req.url.replace('/api/backend', '');
+      } else if (req.url.startsWith('/backend/api')) {
+        req.url = req.url.replace('/backend/api', '');
+      }
+    }
+
+    server(req, res);
+  } catch (err: any) {
+    console.error('Serverless Handler Error:', err);
+    if (!res.headersSent) {
+      res.status(500).json({
+        error: 'Backend Serverless Error',
+        message: err?.message || String(err),
+        stack: err?.stack,
+      });
     }
   }
-  server(req, res);
 }
