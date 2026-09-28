@@ -61,7 +61,7 @@ export class AuthService {
         joiningDate: dto.joiningDate ? new Date(dto.joiningDate) : null,
         leavingDate: dto.leavingDate ? new Date(dto.leavingDate) : null,
         address: dto.address || null,
-        role: UserRole.ADMIN, // Defaulting to ADMIN for now
+        role: UserRole.ADMIN as any, // Defaulting to ADMIN for now
       },
       select: this.userSelect(),
     });
@@ -321,8 +321,9 @@ export class AuthService {
   private async generateTokens(user: Record<string, unknown>) {
     const payload = { sub: user.id, email: user.email, role: user.role };
 
+    const secret = this.config.get('JWT_SECRET') || process.env.JWT_SECRET || 'support-app-default-jwt-secret-key-32chars!';
     const accessToken = this.jwtService.sign(payload, {
-      secret: this.config.get('JWT_SECRET'),
+      secret,
       expiresIn: this.config.get('JWT_EXPIRES_IN') || '30m',
     });
 
