@@ -96,12 +96,15 @@ export default function OfficeBoyStaffPage() {
       (l) => l.branchId === item.branchId && l.isActive,
     );
     setForm({
+      employeeCode: (item as any).employeeCode || '',
       firstName: item.firstName,
       lastName: item.lastName,
+      serialNumber: (item as any).serialNumber || '',
       phone: item.phone || '',
       password: '',
       branchId: item.branchId || '',
       officeLocationId: item.officeLocationId || branchLocations[0]?.id || '',
+      assignDate: (item as any).assignDate ? (item as any).assignDate.split('T')[0] : '',
       isActive: item.isActive !== false ? 'true' : 'false',
     });
     modal.openEdit(item);
