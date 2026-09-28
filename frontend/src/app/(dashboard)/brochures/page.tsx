@@ -240,12 +240,14 @@ export default function BrochuresPage() {
         <form onSubmit={handleStockSubmit} className="space-y-4">
           <Input
             label="Name"
+            placeholder="Enter name"
             value={stockForm.name}
             onChange={(e) => setStockForm({ ...stockForm, name: e.target.value })}
             required
           />
           <Input
             label="Quantity"
+            placeholder="Enter quantity"
             type="number"
             value={stockForm.quantity}
             onChange={(e) => setStockForm({ ...stockForm, quantity: e.target.value })}
@@ -253,6 +255,7 @@ export default function BrochuresPage() {
           />
           <Input
             label="Min Stock"
+            placeholder="Enter minimum stock"
             type="number"
             value={stockForm.minStock}
             onChange={(e) => setStockForm({ ...stockForm, minStock: e.target.value })}

@@ -232,10 +232,10 @@ export default function BranchesPage() {
           title={modal.isEdit ? 'Edit Branch' : 'Add Branch'}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-            <Input label="Code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} required />
-            <Input label="City" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
-            <Input label="Address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+            <Input label="Name" placeholder="Enter branch name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+            <Input label="Code" placeholder="Enter branch code" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} required />
+            <Input label="City" placeholder="Enter city" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
+            <Input label="Address" placeholder="Enter address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
             {modal.isEdit && (
               <Select
                 label="Status"

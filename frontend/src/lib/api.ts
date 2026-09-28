@@ -331,7 +331,9 @@ export const expensesApi = {
 export const joiningKitApi = {
   items: () => api.get('/joining-kit/items'),
   stock: () => api.get('/joining-kit/stock'),
+  issues: () => api.get('/joining-kit/issues'),
   issue: (data: Record<string, unknown>) => api.post('/joining-kit/issue', data),
+  returnKit: (id: string, data: Record<string, unknown>) => api.post(`/joining-kit/issues/${id}/return`, data),
   updateItem: (id: string, data: Record<string, unknown>) => api.put(`/joining-kit/items/${id}`, data),
 };
 
@@ -476,6 +478,8 @@ export interface CourierRequest {
   trackingNumber?: string;
   vendorId?: string;
   branchId?: string;
+  pickupDate?: string;
+  deliveryDate?: string;
   createdAt: string;
   vendor?: Vendor;
   branch?: Branch;
@@ -489,6 +493,10 @@ export interface Asset {
   status: string;
   categoryId?: string;
   branchId?: string;
+  employeeCode?: string;
+  employeeName?: string;
+  location?: string;
+  assignedDate?: string;
   category?: AssetCategory;
   branch?: Branch;
 }
@@ -519,6 +527,7 @@ export interface Expense {
   entity?: Entity;
   branch?: Branch;
   createdBy?: User;
+  invoiceUrl?: string;
 }
 
 export interface ExpenseSummaryItem {
@@ -563,11 +572,14 @@ export interface AmcRecord {
   amount?: number;
   vendor?: Vendor;
   branch?: Branch;
+  emailNotification?: boolean;
+  documentUrl?: string;
 }
 
 export interface SeatingRecord {
   id: string;
   floor: string;
+  zone?: string;
   totalSeats: number;
   occupiedSeats: number;
   recordDate: string;
@@ -586,12 +598,19 @@ export interface BrochureStock {
 export interface PgRecord {
   id: string;
   employeeName: string;
+  raisedBy?: string;
+  location?: string;
   address: string;
   rentAmount: number;
   agreementStart: string;
   agreementEnd: string;
+  contactPhone?: string;
+  fileAttachment?: string;
+  reminderDays?: number;
   status: string;
+  notes?: string;
   branch?: Branch;
+  createdAt?: string;
 }
 
 export interface Notification {
@@ -818,4 +837,41 @@ export const attendanceCorrectionsApi = {
     api.patch<AttendanceCorrectionRequest>(`/attendance/corrections/${id}/reject`, {
       adminNotes,
     }),
+};
+
+// ─── Attachments / Uploads ───────────────────────────────────────────────────
+
+export interface Attachment {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  mimeType?: string;
+  fileSize?: number;
+  module: string;
+  recordId: string;
+  uploadedBy?: string;
+  cloudinaryPublicId?: string;
+  createdAt: string;
+}
+
+export const uploadsApi = {
+  /**
+   * Upload a file to a specific module record.
+   * @param file      The File object from an <input type="file">
+   * @param module    The module name, e.g. 'expenses', 'requests', 'amc'
+   * @param recordId  The ID of the record this file belongs to
+   */
+  upload: (file: File, module: string, recordId: string) =>
+    api.upload<Attachment>(`/uploads?module=${encodeURIComponent(module)}&recordId=${encodeURIComponent(recordId)}`, file),
+
+  /**
+   * Fetch all attachments for a given module + record.
+   */
+  listByRecord: (module: string, recordId: string) =>
+    api.get<Attachment[]>(`/uploads?module=${encodeURIComponent(module)}&recordId=${encodeURIComponent(recordId)}`),
+
+  /**
+   * Delete an attachment (removes from Cloudinary + DB).
+   */
+  delete: (id: string) => api.delete<{ success: boolean }>(`/uploads/${id}`),
 };

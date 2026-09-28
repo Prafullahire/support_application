@@ -7,6 +7,10 @@ export class CreateIdCardDto {
   @IsOptional()
   @IsString()
   branchId?: string;
+
+  @IsOptional()
+  @IsString()
+  receivedDate?: string;
 }
 
 export class UpdateIdCardDto {
@@ -21,6 +25,10 @@ export class UpdateIdCardDto {
   @IsOptional()
   @IsBoolean()
   isAvailable?: boolean;
+
+  @IsOptional()
+  @IsString()
+  receivedDate?: string;
 }
 
 export class AssignIdCardDto {

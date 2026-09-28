@@ -45,6 +45,7 @@ export class AssetsService {
       data: {
         ...dto,
         purchaseDate: dto.purchaseDate ? new Date(dto.purchaseDate) : undefined,
+        assignedDate: dto.assignedDate ? new Date(dto.assignedDate) : undefined,
         warrantyEnd: dto.warrantyEnd ? new Date(dto.warrantyEnd) : undefined,
       },
       include: this.assetInclude(),
@@ -58,6 +59,7 @@ export class AssetsService {
       data: {
         ...dto,
         purchaseDate: dto.purchaseDate ? new Date(dto.purchaseDate) : undefined,
+        assignedDate: dto.assignedDate ? new Date(dto.assignedDate) : undefined,
         warrantyEnd: dto.warrantyEnd ? new Date(dto.warrantyEnd) : undefined,
       },
       include: this.assetInclude(),

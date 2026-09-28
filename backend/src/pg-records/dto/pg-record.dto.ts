@@ -28,6 +28,22 @@ export class CreatePgRecordDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsString()
+  raisedBy?: string;
+
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
+  @IsString()
+  fileAttachment?: string;
+
+  @IsOptional()
+  @IsNumber()
+  reminderDays?: number;
 }
 
 export class UpdatePgRecordDto {
@@ -66,4 +82,20 @@ export class UpdatePgRecordDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsString()
+  raisedBy?: string;
+
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
+  @IsString()
+  fileAttachment?: string;
+
+  @IsOptional()
+  @IsNumber()
+  reminderDays?: number;
 }

@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateJoiningKitItemDto,
   IssueJoiningKitDto,
+  ReturnJoiningKitDto,
   UpdateJoiningKitItemDto,
   UpsertJoiningKitStockDto,
 } from './dto/joining-kit.dto';
@@ -109,6 +110,11 @@ export class JoiningKitService {
         data: {
           issueNumber,
           userId: dto.userId,
+          employeeId: dto.employeeId,
+          employeeName: dto.employeeName,
+          location: dto.location,
+          branchId: dto.branchId,
+          joiningDate: dto.joiningDate ? new Date(dto.joiningDate) : null,
           notes: dto.notes,
           items: {
             create: dto.items.map((item) => ({
@@ -122,6 +128,23 @@ export class JoiningKitService {
           items: { include: { item: true } },
         },
       });
+    });
+  }
+
+  async returnKit(id: string, dto: ReturnJoiningKitDto) {
+    const issue = await this.prisma.joiningKitIssue.findUnique({
+      where: { id },
+    });
+    if (!issue) throw new NotFoundException('Joining kit issue not found');
+    if (issue.isReturned) throw new BadRequestException('Kit already returned');
+
+    return this.prisma.joiningKitIssue.update({
+      where: { id },
+      data: {
+        isReturned: true,
+        returnedAt: new Date(),
+        ...(dto.notes ? { notes: dto.notes } : {}),
+      },
     });
   }
 }

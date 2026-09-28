@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { IsArray, IsBoolean, IsDateString, IsInt, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateJoiningKitItemDto {
@@ -63,4 +63,30 @@ export class IssueJoiningKitDto {
   @ValidateNested({ each: true })
   @Type(() => IssueKitItemDto)
   items: IssueKitItemDto[];
+
+  @IsOptional()
+  @IsString()
+  employeeId?: string;
+
+  @IsOptional()
+  @IsString()
+  employeeName?: string;
+
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
+  @IsString()
+  branchId?: string;
+
+  @IsOptional()
+  @IsDateString()
+  joiningDate?: string;
+}
+
+export class ReturnJoiningKitDto {
+  @IsOptional()
+  @IsString()
+  notes?: string;
 }

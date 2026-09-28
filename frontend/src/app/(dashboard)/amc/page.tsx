@@ -14,6 +14,7 @@ import { RowActions } from '@/components/ui/row-actions';
 import { DetailField, DetailView } from '@/components/ui/detail-view';
 import { useRecordModal } from '@/hooks/use-record-modal';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import FileUpload from '@/components/ui/file-upload';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorBanner } from '@/components/ui/error-banner';
 import { toast } from 'sonner';
@@ -41,6 +42,8 @@ export default function AmcPage() {
     endDate: '',
     amount: '',
     status: 'ACTIVE',
+    emailNotification: 'false',
+    documentUrl: '',
   });
 
   const loadData = () => {
@@ -61,7 +64,7 @@ export default function AmcPage() {
   }, []);
 
   const resetForm = () =>
-    setForm({ title: '', startDate: '', endDate: '', amount: '', status: 'ACTIVE' });
+    setForm({ title: '', startDate: '', endDate: '', amount: '', status: 'ACTIVE', emailNotification: 'false', documentUrl: '' });
 
   const openCreate = () => {
     resetForm();
@@ -75,6 +78,8 @@ export default function AmcPage() {
       endDate: item.endDate.split('T')[0],
       amount: item.amount ? String(item.amount) : '',
       status: item.status,
+      emailNotification: item.emailNotification ? 'true' : 'false',
+      documentUrl: item.documentUrl || '',
     });
     modal.openEdit(item);
   };
@@ -88,6 +93,8 @@ export default function AmcPage() {
         startDate: form.startDate,
         endDate: form.endDate,
         amount: form.amount ? Number(form.amount) : undefined,
+        emailNotification: form.emailNotification === 'true',
+        documentUrl: form.documentUrl || undefined,
         ...(modal.isEdit ? { status: form.status } : {}),
       };
       if (modal.isEdit && modal.selected) {
@@ -221,6 +228,14 @@ export default function AmcPage() {
             />
             <DetailField label="Status" value={<Badge status={modal.selected.status} />} />
             <DetailField
+              label="Email Notification"
+              value={modal.selected.emailNotification ? 'Enabled' : 'Disabled'}
+            />
+            <DetailField 
+              label="Document" 
+              value={modal.selected.documentUrl ? <a href={modal.selected.documentUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 underline">View Document</a> : '-'} 
+            />
+            <DetailField
               label="Created At"
               value={
                 (modal.selected as AmcWithMeta).createdAt
@@ -238,7 +253,7 @@ export default function AmcPage() {
         title={modal.isEdit ? 'Edit AMC Record' : 'Add AMC Record'}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+          <Input label="Title" placeholder="Enter title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
           <Input
             label="Start Date"
             type="date"
@@ -255,6 +270,7 @@ export default function AmcPage() {
           />
           <Input
             label="Amount"
+            placeholder="Enter amount"
             type="number"
             step="0.01"
             value={form.amount}
@@ -268,6 +284,24 @@ export default function AmcPage() {
               options={STATUS_OPTIONS}
             />
           )}
+          <Select
+            label="Email Notification"
+            value={form.emailNotification}
+            onChange={(e) => setForm({ ...form, emailNotification: e.target.value })}
+            options={[
+              { value: 'true', label: 'Enabled' },
+              { value: 'false', label: 'Disabled' },
+            ]}
+          />
+          <FileUpload
+            module="amc"
+            recordId={modal.selected?.id || 'new'}
+            attachments={form.documentUrl ? [{ id: '1', fileName: 'Document', fileUrl: form.documentUrl, mimeType: 'application/pdf', fileSize: 0 } as any] : []}
+            onUpload={(att) => setForm({ ...form, documentUrl: att.fileUrl })}
+            onDelete={() => setForm({ ...form, documentUrl: '' })}
+            label="AMC Document Attachment"
+            multiple={false}
+          />
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="secondary" onClick={modal.close}>Cancel</Button>
             <Button type="submit" loading={submitting}>{modal.isEdit ? 'Update' : 'Create'}</Button>

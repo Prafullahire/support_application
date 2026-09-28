@@ -7,6 +7,10 @@ export class CreateSeatingRecordDto {
   @IsString()
   floor: string;
 
+  @IsOptional()
+  @IsString()
+  zone?: string;
+
   @IsInt()
   @Min(0)
   totalSeats: number;
@@ -28,6 +32,10 @@ export class UpdateSeatingRecordDto {
   @IsOptional()
   @IsString()
   floor?: string;
+
+  @IsOptional()
+  @IsString()
+  zone?: string;
 
   @IsOptional()
   @IsInt()

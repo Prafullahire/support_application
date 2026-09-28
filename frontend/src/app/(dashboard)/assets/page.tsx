@@ -3,7 +3,7 @@
 import { PageHeader } from '@/components/layout/page-header';
 import { FormEvent, useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { assetsApi, Asset, AssetCategory } from '@/lib/api';
+import { assetsApi, branchesApi, Asset, AssetCategory, Branch } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,18 +34,30 @@ const STATUS_OPTIONS = [
 export default function AssetsPage() {
   const [items, setItems] = useState<Asset[]>([]);
   const [categories, setCategories] = useState<AssetCategory[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const modal = useRecordModal<Asset>();
-  const [form, setForm] = useState({ name: '', serialNumber: '', categoryId: '', status: 'AVAILABLE' });
+  const [form, setForm] = useState({
+    name: '',
+    serialNumber: '',
+    categoryId: '',
+    status: 'AVAILABLE',
+    employeeCode: '',
+    employeeName: '',
+    location: '',
+    branchId: '',
+    assignedDate: '',
+  });
 
   const loadData = () => {
     setLoading(true);
-    Promise.all([assetsApi.list(), assetsApi.categories()])
-      .then(([assets, cats]) => {
+    Promise.all([assetsApi.list(), assetsApi.categories(), branchesApi.list()])
+      .then(([assets, cats, brs]) => {
         setItems(assets);
         setCategories(cats);
+        setBranches(brs);
       })
       .catch((err) => {
         const message = err instanceof Error ? err.message : 'Failed to load assets';
@@ -59,7 +71,18 @@ export default function AssetsPage() {
     loadData();
   }, []);
 
-  const resetForm = () => setForm({ name: '', serialNumber: '', categoryId: '', status: 'AVAILABLE' });
+  const resetForm = () =>
+    setForm({
+      name: '',
+      serialNumber: '',
+      categoryId: '',
+      status: 'AVAILABLE',
+      employeeCode: '',
+      employeeName: '',
+      location: '',
+      branchId: '',
+      assignedDate: '',
+    });
 
   const openCreate = () => {
     resetForm();
@@ -72,6 +95,11 @@ export default function AssetsPage() {
       serialNumber: item.serialNumber || '',
       categoryId: item.categoryId || '',
       status: item.status,
+      employeeCode: item.employeeCode || '',
+      employeeName: item.employeeName || '',
+      location: item.location || '',
+      branchId: item.branchId || '',
+      assignedDate: item.assignedDate ? item.assignedDate.split('T')[0] : '',
     });
     modal.openEdit(item);
   };
@@ -84,6 +112,11 @@ export default function AssetsPage() {
         name: form.name,
         serialNumber: form.serialNumber || undefined,
         categoryId: form.categoryId || undefined,
+        employeeCode: form.employeeCode || undefined,
+        employeeName: form.employeeName || undefined,
+        location: form.location || undefined,
+        branchId: form.branchId || undefined,
+        assignedDate: form.assignedDate || undefined,
         ...(modal.isEdit ? { status: form.status } : {}),
       };
       if (modal.isEdit && modal.selected) {
@@ -127,7 +160,7 @@ export default function AssetsPage() {
         subtitle="Manage company assets"
         actions={
           <Button onClick={openCreate} className="gap-2">
-            <Plus className="h-4 w-4" /> Add Asset
+            <Plus className="h-4 w-4" /> Assign Asset
           </Button>
         }
       />
@@ -147,6 +180,9 @@ export default function AssetsPage() {
                   <th className="pb-3 pr-4 font-medium">Name</th>
                   <th className="pb-3 pr-4 font-medium">Serial Number</th>
                   <th className="pb-3 pr-4 font-medium">Category</th>
+                  <th className="pb-3 pr-4 font-medium">Employee Code</th>
+                  <th className="pb-3 pr-4 font-medium">Employee Name</th>
+                  <th className="pb-3 pr-4 font-medium">Location</th>
                   <th className="pb-3 pr-4 font-medium">Branch</th>
                   <th className="pb-3 pr-4 font-medium">Status</th>
                   <th className="pb-3 pr-4 font-medium">Date</th>
@@ -159,6 +195,9 @@ export default function AssetsPage() {
                     <td className="py-3 pr-4 font-medium text-black">{item.name}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.serialNumber || '-'}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.category?.name || '-'}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.employeeCode || '-'}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.employeeName || '-'}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.location || '-'}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.branch?.name || '-'}</td>
                     <td className="py-3 pr-4"><Badge status={item.status} /></td>
                     <td className="py-3 pr-4 text-neutral-600">{formatDate((item as AssetWithDate).createdAt)}</td>
@@ -203,7 +242,11 @@ export default function AssetsPage() {
             <DetailField label="Name" value={modal.selected.name} />
             <DetailField label="Serial Number" value={modal.selected.serialNumber} />
             <DetailField label="Category" value={modal.selected.category?.name} />
+            <DetailField label="Employee Code" value={modal.selected.employeeCode || '-'} />
+            <DetailField label="Employee Name" value={modal.selected.employeeName || '-'} />
+            <DetailField label="Location" value={modal.selected.location || '-'} />
             <DetailField label="Branch" value={modal.selected.branch?.name} />
+            <DetailField label="Assigned Date" value={modal.selected.assignedDate ? formatDate(modal.selected.assignedDate) : '-'} />
             <DetailField label="Status" value={<Badge status={modal.selected.status} />} />
             <DetailField
               label="Created At"
@@ -220,23 +263,62 @@ export default function AssetsPage() {
       <Modal
         open={modal.isCreate || modal.isEdit}
         onClose={modal.close}
-        title={modal.isEdit ? 'Edit Asset' : 'Add Asset'}
+        title={modal.isEdit ? 'Edit Asset Assignment' : 'Assign Asset'}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-          <Input
-            label="Serial Number"
-            value={form.serialNumber}
-            onChange={(e) => setForm({ ...form, serialNumber: e.target.value })}
-          />
-          {categories.length > 0 && (
-            <Select
-              label="Category"
-              value={form.categoryId}
-              onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-              options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Employee Code"
+              placeholder="Enter employee code"
+              value={form.employeeCode}
+              onChange={(e) => setForm({ ...form, employeeCode: e.target.value })}
             />
-          )}
+            <Input
+              label="Employee Name"
+              placeholder="Enter employee name"
+              value={form.employeeName}
+              onChange={(e) => setForm({ ...form, employeeName: e.target.value })}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Name" placeholder="Enter asset name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+            <Input
+              label="Serial Number"
+              placeholder="Enter serial number"
+              value={form.serialNumber}
+              onChange={(e) => setForm({ ...form, serialNumber: e.target.value })}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Select
+              label="Branch"
+              value={form.branchId}
+              onChange={(e) => setForm({ ...form, branchId: e.target.value })}
+              options={[{ value: '', label: 'Select branch...' }, ...branches.map((b) => ({ value: b.id, label: b.name }))]}
+            />
+            <Input
+              label="Location"
+              placeholder="Enter location"
+              value={form.location}
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Assigned Date"
+              type="date"
+              value={form.assignedDate}
+              onChange={(e) => setForm({ ...form, assignedDate: e.target.value })}
+            />
+            {categories.length > 0 && (
+              <Select
+                label="Category"
+                value={form.categoryId}
+                onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+                options={categories.map((c) => ({ value: c.id, label: c.name }))}
+              />
+            )}
+          </div>
           {modal.isEdit && (
             <Select
               label="Status"

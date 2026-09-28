@@ -227,8 +227,8 @@ export default function RequestsPage() {
         title={modal.isEdit ? 'Edit Request' : 'Create Request'}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
-          <Input label="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          <Input label="Title" placeholder="Enter title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+          <Input label="Description" placeholder="Enter description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <Select label="Type" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} options={TYPE_OPTIONS} />
           {modal.isEdit && (
             <Select label="Status" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} options={STATUS_OPTIONS} />

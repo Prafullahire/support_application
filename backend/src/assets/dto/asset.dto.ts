@@ -22,8 +22,24 @@ export class CreateAssetDto {
   branchId?: string;
 
   @IsOptional()
+  @IsString()
+  employeeCode?: string;
+
+  @IsOptional()
+  @IsString()
+  employeeName?: string;
+
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
   @IsDateString()
   purchaseDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  assignedDate?: string;
 
   @IsOptional()
   @IsDateString()
@@ -52,12 +68,28 @@ export class UpdateAssetDto {
   branchId?: string;
 
   @IsOptional()
+  @IsString()
+  employeeCode?: string;
+
+  @IsOptional()
+  @IsString()
+  employeeName?: string;
+
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
   @IsEnum(AssetStatus)
   status?: AssetStatus;
 
   @IsOptional()
   @IsDateString()
   purchaseDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  assignedDate?: string;
 
   @IsOptional()
   @IsDateString()

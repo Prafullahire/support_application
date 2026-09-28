@@ -389,12 +389,14 @@ export default function UsersPage() {
             <div className="grid grid-cols-2 gap-4">
               <Input
                 label="First Name"
+                placeholder="Enter first name"
                 value={form.firstName}
                 onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                 required
               />
               <Input
                 label="Last Name"
+                placeholder="Enter last name"
                 value={form.lastName}
                 onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                 required
@@ -402,6 +404,7 @@ export default function UsersPage() {
             </div>
             <Input
               label={isOfficeBoy ? 'Email (optional)' : 'Email'}
+              placeholder="Enter email"
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -409,12 +412,14 @@ export default function UsersPage() {
             />
             <Input
               label="Mobile Number"
+              placeholder="Enter mobile number"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               required={isOfficeBoy}
             />
             <Input
               label={modal.isEdit ? 'New Password (optional)' : 'Password'}
+              placeholder="Enter password"
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}

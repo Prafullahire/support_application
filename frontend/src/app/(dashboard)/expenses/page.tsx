@@ -23,6 +23,7 @@ import { RowActions } from '@/components/ui/row-actions';
 import { DetailField, DetailView } from '@/components/ui/detail-view';
 import { useRecordModal } from '@/hooks/use-record-modal';
 import { formatCurrency, formatDate } from '@/lib/utils';
+import FileUpload from '@/components/ui/file-upload';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorBanner } from '@/components/ui/error-banner';
 import { toast } from 'sonner';
@@ -67,6 +68,7 @@ export default function ExpensesPage() {
     entityId: '',
     branchId: '',
     description: '',
+    invoiceUrl: '',
   });
 
   const loadData = useCallback(() => {
@@ -107,7 +109,7 @@ export default function ExpensesPage() {
   }, [loadData]);
 
   const resetForm = () =>
-    setForm({ title: '', amount: '', expenseDate: '', categoryId: '', entityId: '', branchId: '', description: '' });
+    setForm({ title: '', amount: '', expenseDate: '', categoryId: '', entityId: '', branchId: '', description: '', invoiceUrl: '' });
 
   const openCreate = () => {
     resetForm();
@@ -123,6 +125,7 @@ export default function ExpensesPage() {
       entityId: item.entityId || '',
       branchId: item.branchId || '',
       description: (item as Expense & { description?: string }).description || '',
+      invoiceUrl: item.invoiceUrl || '',
     });
     modal.openEdit(item);
   };
@@ -139,6 +142,7 @@ export default function ExpensesPage() {
         entityId: form.entityId || undefined,
         branchId: form.branchId || undefined,
         description: form.description || undefined,
+        invoiceUrl: form.invoiceUrl || undefined,
       };
       if (modal.isEdit && modal.selected) {
         await expensesApi.update(modal.selected.id, payload);
@@ -399,6 +403,7 @@ export default function ExpensesPage() {
             <DetailField label="Category" value={modal.selected.category?.name} />
             <DetailField label="Vendor" value={modal.selected.vendor?.name} />
             <DetailField label="Date" value={formatDate(modal.selected.expenseDate)} />
+            <DetailField label="Invoice" value={modal.selected.invoiceUrl ? <a href={modal.selected.invoiceUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 underline">View Invoice</a> : '-'} />
             <DetailField
               label="Created By"
               value={
@@ -418,10 +423,11 @@ export default function ExpensesPage() {
         size="lg"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+          <Input label="Title" placeholder="Enter title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Amount"
+              placeholder="Enter amount"
               type="number"
               step="0.01"
               value={form.amount}
@@ -458,8 +464,18 @@ export default function ExpensesPage() {
           )}
           <Input
             label="Description"
+            placeholder="Enter description"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+          <FileUpload
+            module="expenses"
+            recordId={modal.selected?.id || 'new'}
+            attachments={form.invoiceUrl ? [{ id: '1', fileName: 'Invoice', fileUrl: form.invoiceUrl, mimeType: 'application/pdf', fileSize: 0 } as any] : []}
+            onUpload={(att) => setForm({ ...form, invoiceUrl: att.fileUrl })}
+            onDelete={() => setForm({ ...form, invoiceUrl: '' })}
+            label="Invoice Attachment"
+            multiple={false}
           />
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="secondary" onClick={modal.close}>Cancel</Button>

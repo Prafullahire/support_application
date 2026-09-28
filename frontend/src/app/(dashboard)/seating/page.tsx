@@ -1,7 +1,7 @@
 'use client';
 
 import { PageHeader } from '@/components/layout/page-header';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { seatingApi, branchesApi, SeatingRecord, Branch } from '@/lib/api';
 import { Card } from '@/components/ui/card';
@@ -19,7 +19,21 @@ import { toast } from 'sonner';
 import { usePagination } from '@/hooks/use-pagination';
 import { Pagination } from '@/components/ui/pagination';
 
-type SeatingWithMeta = SeatingRecord & { createdAt?: string; seatNumber?: string; section?: string };
+type SeatingWithMeta = SeatingRecord & { createdAt?: string };
+
+// Predefined floors and their zones
+const FLOOR_ZONE_MAP: Record<string, string[]> = {
+  'Ground Floor': ['Zone 1', 'Zone 2', 'Zone 3', 'Reception', 'Lobby'],
+  '1st Floor': ['Zone 1', 'Zone 2', 'Zone 3', 'Conference Room A', 'Conference Room B'],
+  '2nd Floor': ['Zone 1', 'Zone 2', 'Zone 3', 'Meeting Room', 'Cabin Area'],
+  '3rd Floor': ['Zone 1', 'Zone 2', 'Zone 3', 'Training Room', 'Cafeteria'],
+  '4th Floor': ['Zone 1', 'Zone 2', 'Zone 3'],
+  '5th Floor': ['Zone 1', 'Zone 2', 'Zone 3'],
+  'Basement': ['Zone 1', 'Zone 2', 'Parking', 'Storage'],
+  'Terrace': ['Open Area', 'Pantry', 'Recreation'],
+};
+
+const FLOOR_OPTIONS = Object.keys(FLOOR_ZONE_MAP).map((f) => ({ value: f, label: f }));
 
 export default function SeatingPage() {
   const [items, setItems] = useState<SeatingRecord[]>([]);
@@ -31,10 +45,19 @@ export default function SeatingPage() {
   const [form, setForm] = useState({
     branchId: '',
     floor: '',
+    zone: '',
     totalSeats: '',
     occupiedSeats: '',
     recordDate: '',
+    notes: '',
   });
+
+  // Derive zone options based on selected floor
+  const zoneOptions = useMemo(() => {
+    if (!form.floor) return [];
+    const zones = FLOOR_ZONE_MAP[form.floor] || ['Zone 1', 'Zone 2', 'Zone 3'];
+    return zones.map((z) => ({ value: z, label: z }));
+  }, [form.floor]);
 
   const loadData = () => {
     setLoading(true);
@@ -56,7 +79,7 @@ export default function SeatingPage() {
   }, []);
 
   const resetForm = () =>
-    setForm({ branchId: '', floor: '', totalSeats: '', occupiedSeats: '', recordDate: '' });
+    setForm({ branchId: '', floor: '', zone: '', totalSeats: '', occupiedSeats: '', recordDate: '', notes: '' });
 
   const openCreate = () => {
     resetForm();
@@ -67,9 +90,11 @@ export default function SeatingPage() {
     setForm({
       branchId: item.branchId || '',
       floor: item.floor,
+      zone: item.zone || '',
       totalSeats: String(item.totalSeats),
       occupiedSeats: String(item.occupiedSeats),
       recordDate: item.recordDate.split('T')[0],
+      notes: '',
     });
     modal.openEdit(item);
   };
@@ -87,12 +112,19 @@ export default function SeatingPage() {
         setSubmitting(false);
         return;
       }
+      if (!form.floor) {
+        toast.error('Please select a floor');
+        setSubmitting(false);
+        return;
+      }
 
       const payload = {
         floor: form.floor,
+        zone: form.zone || undefined,
         totalSeats: Number(form.totalSeats),
         occupiedSeats: Number(form.occupiedSeats),
         recordDate: form.recordDate,
+        notes: form.notes || undefined,
       };
       if (modal.isEdit && modal.selected) {
         await seatingApi.update(modal.selected.id, payload);
@@ -114,7 +146,7 @@ export default function SeatingPage() {
   };
 
   const handleDelete = async (item: SeatingRecord) => {
-    if (!confirm(`Delete seating record for floor "${item.floor}"?`)) return;
+    if (!confirm(`Delete seating record for "${item.floor}${item.zone ? ' – ' + item.zone : ''}"?`)) return;
     try {
       await seatingApi.delete(item.id);
       toast.success('Deleted successfully');
@@ -132,7 +164,7 @@ export default function SeatingPage() {
     <div className="space-y-6">
       <PageHeader
         title="Daily Seating"
-        subtitle="Track daily seating occupancy"
+        subtitle="Track daily seating occupancy by floor and zone"
         actions={
           <Button onClick={openCreate} className="gap-2">
             <Plus className="h-4 w-4" /> Add Record
@@ -153,6 +185,7 @@ export default function SeatingPage() {
               <thead>
                 <tr className="border-b border-neutral-200 text-left text-neutral-500">
                   <th className="pb-3 pr-4 font-medium">Floor</th>
+                  <th className="pb-3 pr-4 font-medium">Zone</th>
                   <th className="pb-3 pr-4 font-medium">Total Seats</th>
                   <th className="pb-3 pr-4 font-medium">Occupied</th>
                   <th className="pb-3 pr-4 font-medium">Available</th>
@@ -165,6 +198,7 @@ export default function SeatingPage() {
                 {pagination.paginatedItems.map((item) => (
                   <tr key={item.id} className="border-b border-neutral-100">
                     <td className="py-3 pr-4 font-medium text-black">{item.floor}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.zone || '-'}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.totalSeats}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.occupiedSeats}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.totalSeats - item.occupiedSeats}</td>
@@ -195,6 +229,7 @@ export default function SeatingPage() {
         )}
       </Card>
 
+      {/* View Modal */}
       <Modal
         open={modal.isView}
         onClose={modal.close}
@@ -209,6 +244,7 @@ export default function SeatingPage() {
         {modal.selected && (
           <DetailView>
             <DetailField label="Floor" value={modal.selected.floor} />
+            <DetailField label="Zone" value={modal.selected.zone || '-'} />
             <DetailField label="Total Seats" value={modal.selected.totalSeats} />
             <DetailField label="Occupied Seats" value={modal.selected.occupiedSeats} />
             <DetailField
@@ -221,6 +257,7 @@ export default function SeatingPage() {
         )}
       </Modal>
 
+      {/* Create / Edit Modal */}
       <Modal
         open={modal.isCreate || modal.isEdit}
         onClose={modal.close}
@@ -236,21 +273,52 @@ export default function SeatingPage() {
               options={branches.map((b) => ({ value: b.id, label: b.name }))}
             />
           )}
-          <Input label="Floor" value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} required />
-          <Input
-            label="Total Seats"
-            type="number"
-            value={form.totalSeats}
-            onChange={(e) => setForm({ ...form, totalSeats: e.target.value })}
+
+          {/* Floor Selector */}
+          <Select
+            label="Floor"
+            value={form.floor}
+            onChange={(e) => setForm({ ...form, floor: e.target.value, zone: '' })}
             required
+            options={FLOOR_OPTIONS}
           />
-          <Input
-            label="Occupied Seats"
-            type="number"
-            value={form.occupiedSeats}
-            onChange={(e) => setForm({ ...form, occupiedSeats: e.target.value })}
-            required
-          />
+
+          {/* Zone Selector — only shown after floor is selected */}
+          {form.floor && zoneOptions.length > 0 && (
+            <div>
+              <Select
+                label="Zone / Room"
+                value={form.zone}
+                onChange={(e) => setForm({ ...form, zone: e.target.value })}
+                options={[{ value: '', label: 'Select zone...' }, ...zoneOptions]}
+              />
+              <p className="mt-1 text-xs text-neutral-400">
+                Zones for <strong>{form.floor}</strong>: {zoneOptions.map((z) => z.label).join(', ')}
+              </p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Total Seats"
+              placeholder="Enter total seats"
+              type="number"
+              min="0"
+              value={form.totalSeats}
+              onChange={(e) => setForm({ ...form, totalSeats: e.target.value })}
+              required
+            />
+            <Input
+              label="Occupied Seats"
+              placeholder="Enter occupied seats"
+              type="number"
+              min="0"
+              value={form.occupiedSeats}
+              onChange={(e) => setForm({ ...form, occupiedSeats: e.target.value })}
+              required
+            />
+          </div>
+
           <Input
             label="Date"
             type="date"
@@ -258,6 +326,14 @@ export default function SeatingPage() {
             onChange={(e) => setForm({ ...form, recordDate: e.target.value })}
             required
           />
+
+          <Input
+            label="Notes (Optional)"
+            placeholder="Enter notes"
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+          />
+
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="secondary" onClick={modal.close}>Cancel</Button>
             <Button type="submit" loading={submitting}>{modal.isEdit ? 'Update' : 'Create'}</Button>

@@ -222,7 +222,7 @@ export default function DepartmentsPage() {
           title={modal.isEdit ? 'Edit Department' : 'Add Department'}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+            <Input label="Name" placeholder="Enter department name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             {branches.length > 0 && (
               <Select
                 label="Branch"

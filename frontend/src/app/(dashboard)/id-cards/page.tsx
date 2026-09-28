@@ -243,6 +243,7 @@ export default function IdCardsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Card Number"
+            placeholder="Enter card number"
             value={form.cardNumber}
             onChange={(e) => setForm({ ...form, cardNumber: e.target.value })}
             required

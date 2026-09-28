@@ -25,8 +25,48 @@ export class AuthService {
     private mailService: MailService,
   ) {}
 
-  async register(_dto: RegisterDto) {
-    throw new BadRequestException('Self registration is not available');
+  async register(dto: RegisterDto) {
+    const isEmail = dto.emailOrPhone.includes('@');
+    const email = isEmail ? dto.emailOrPhone.toLowerCase() : (dto.email?.toLowerCase() || null);
+    const phone = !isEmail ? normalizePhone(dto.emailOrPhone) : (dto.phone ? normalizePhone(dto.phone) : null);
+
+    if (!email) {
+      throw new BadRequestException('An email is required for registration.');
+    }
+
+    const existingUser = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { email },
+          ...(phone ? [{ phone }] : []),
+        ],
+      },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('User with this email or phone already exists.');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        email,
+        phone,
+        password: hashedPassword,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        branchId: dto.branchId || null,
+        officeLocationId: dto.officeLocationId || null,
+        joiningDate: dto.joiningDate ? new Date(dto.joiningDate) : null,
+        leavingDate: dto.leavingDate ? new Date(dto.leavingDate) : null,
+        address: dto.address || null,
+        role: UserRole.ADMIN, // Defaulting to ADMIN for now
+      },
+      select: this.userSelect(),
+    });
+
+    return this.generateTokens(newUser);
   }
 
   async login(dto: LoginDto) {
@@ -95,7 +135,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    await this.prisma.refreshToken.delete({ where: { id: stored.id } });
+    await this.prisma.refreshToken.deleteMany({ where: { id: stored.id } });
 
     const user = await this.prisma.user.findUnique({
       where: { id: stored.userId },

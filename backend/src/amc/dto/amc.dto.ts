@@ -1,5 +1,5 @@
 import { AmcStatus } from '@prisma/client';
-import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAmcDto {
   @IsString()
@@ -38,6 +38,10 @@ export class CreateAmcDto {
   @IsOptional()
   @IsInt()
   reminderDays?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  emailNotification?: boolean;
 }
 
 export class UpdateAmcDto {
@@ -84,4 +88,8 @@ export class UpdateAmcDto {
   @IsOptional()
   @IsInt()
   reminderDays?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  emailNotification?: boolean;
 }

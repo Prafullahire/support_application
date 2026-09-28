@@ -206,19 +206,21 @@ export default function VendorsPage() {
           title={modal.isEdit ? 'Edit Vendor' : 'Add Vendor'}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+            <Input label="Name" placeholder="Enter vendor name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             <Input
               label="Contact Person"
+              placeholder="Enter contact person"
               value={form.contact}
               onChange={(e) => setForm({ ...form, contact: e.target.value })}
             />
             <Input
               label="Email"
+              placeholder="Enter email"
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
-            <Input label="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+            <Input label="Phone" placeholder="Enter phone number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="secondary" onClick={modal.close}>Cancel</Button>
               <Button type="submit" loading={submitting}>{modal.isEdit ? 'Update' : 'Create'}</Button>

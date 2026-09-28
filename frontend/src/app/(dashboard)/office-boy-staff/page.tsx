@@ -36,12 +36,15 @@ export default function OfficeBoyStaffPage() {
   const [submitting, setSubmitting] = useState(false);
   const modal = useRecordModal<OfficeBoyStaff>();
   const [form, setForm] = useState({
+    employeeCode: '',
     firstName: '',
     lastName: '',
+    serialNumber: '',
     phone: '',
     password: '',
     branchId: '',
     officeLocationId: '',
+    assignDate: '',
     isActive: 'true',
   });
 
@@ -75,6 +78,9 @@ export default function OfficeBoyStaffPage() {
       lastName: '',
       phone: '',
       password: '',
+      employeeCode: '',
+      serialNumber: '',
+      assignDate: '',
       branchId: '',
       officeLocationId: '',
       isActive: 'true',
@@ -122,11 +128,14 @@ export default function OfficeBoyStaffPage() {
     setSubmitting(true);
     try {
       const payload = {
+        employeeCode: form.employeeCode,
         firstName: form.firstName,
         lastName: form.lastName,
+        serialNumber: form.serialNumber,
         phone: form.phone,
         branchId: form.branchId,
         officeLocationId: form.officeLocationId || undefined,
+        assignDate: form.assignDate || undefined,
         isActive: form.isActive === 'true',
       };
 
@@ -263,29 +272,46 @@ export default function OfficeBoyStaffPage() {
           title={modal.isEdit ? 'Edit Staff' : 'Create Office Boy Staff'}
         >
           <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Employee Code"
+              placeholder="Enter employee code"
+              value={form.employeeCode}
+              onChange={(e) => setForm({ ...form, employeeCode: e.target.value })}
+              required
+            />
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 label="First Name"
+                placeholder="Enter first name"
                 value={form.firstName}
                 onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                 required
               />
               <Input
                 label="Last Name"
+                placeholder="Enter last name"
                 value={form.lastName}
                 onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                 required
               />
             </div>
             <Input
+              label="Serial Number"
+              placeholder="Enter serial number"
+              value={form.serialNumber}
+              onChange={(e) => setForm({ ...form, serialNumber: e.target.value })}
+              required
+            />
+            <Input
               label="Mobile Number"
+              placeholder="Enter mobile number"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               required
-              placeholder="10-digit mobile number"
             />
             <Input
               label={modal.isEdit ? 'Password (leave blank to keep)' : 'Password'}
+              placeholder="Enter password"
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -327,6 +353,14 @@ export default function OfficeBoyStaffPage() {
                 No active office location for this branch. Create one under Office Locations first.
               </div>
             )}
+            <Input
+              label="Assign Date"
+              placeholder="Select assign date"
+              type="date"
+              value={form.assignDate}
+              onChange={(e) => setForm({ ...form, assignDate: e.target.value })}
+              required
+            />
             {modal.isEdit && (
               <Select
                 label="Status"

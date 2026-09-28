@@ -233,6 +233,7 @@ export default function OfficeLocationsPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="Location Name"
+              placeholder="Enter location name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               required
@@ -247,6 +248,7 @@ export default function OfficeLocationsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 label="Latitude"
+                placeholder="Enter latitude"
                 type="number"
                 step="any"
                 value={form.latitude}
@@ -255,6 +257,7 @@ export default function OfficeLocationsPage() {
               />
               <Input
                 label="Longitude"
+                placeholder="Enter longitude"
                 type="number"
                 step="any"
                 value={form.longitude}
@@ -274,6 +277,7 @@ export default function OfficeLocationsPage() {
             </Button>
             <Input
               label="Allowed Radius (meters)"
+              placeholder="Enter radius"
               type="number"
               min={10}
               value={form.allowedRadiusMeters}

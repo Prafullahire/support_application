@@ -33,6 +33,10 @@ export class CreateExpenseDto {
   @IsOptional()
   @IsString()
   billUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  invoiceUrl?: string;
 }
 
 export class UpdateExpenseDto {
@@ -71,6 +75,10 @@ export class UpdateExpenseDto {
   @IsOptional()
   @IsString()
   billUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  invoiceUrl?: string;
 }
 
 export class ExpenseFilterDto {

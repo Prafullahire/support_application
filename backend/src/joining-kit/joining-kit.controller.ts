@@ -25,9 +25,8 @@ import { JoiningKitService } from './joining-kit.service';
 import {
 
   CreateJoiningKitItemDto,
-
   IssueJoiningKitDto,
-
+  ReturnJoiningKitDto,
   UpdateJoiningKitItemDto,
 
   UpsertJoiningKitStockDto,
@@ -149,10 +148,13 @@ export class JoiningKitController {
   @AdminRoles()
 
   issueKit(@Body() dto: IssueJoiningKitDto) {
-
     return this.service.issueKit(dto);
-
   }
 
+  @Post('issues/:id/return')
+  @AdminRoles()
+  returnKit(@Param('id') id: string, @Body() dto: ReturnJoiningKitDto) {
+    return this.service.returnKit(id, dto);
+  }
 }
 
