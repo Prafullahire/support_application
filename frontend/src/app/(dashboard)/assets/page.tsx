@@ -200,7 +200,7 @@ export default function AssetsPage() {
                     <td className="py-3 pr-4 text-neutral-600">{item.location || '-'}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.branch?.name || '-'}</td>
                     <td className="py-3 pr-4"><Badge status={item.status} /></td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate((item as AssetWithDate).createdAt)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{(item as AssetWithDate).createdAt ? formatDate((item as AssetWithDate).createdAt!) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => modal.openView(item)}

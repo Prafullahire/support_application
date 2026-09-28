@@ -203,7 +203,7 @@ export default function SeatingPage() {
                     <td className="py-3 pr-4 text-neutral-600">{item.occupiedSeats}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.totalSeats - item.occupiedSeats}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.branch?.name || '-'}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate((item as SeatingWithMeta).recordDate)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{(item as SeatingWithMeta).recordDate ? formatDate((item as SeatingWithMeta).recordDate!) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => modal.openView(item)}

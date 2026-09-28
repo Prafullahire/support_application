@@ -145,7 +145,7 @@ export default function VendorsPage() {
                       <td className="py-3 pr-4 text-neutral-600">{item.contact || '-'}</td>
                       <td className="py-3 pr-4 text-neutral-600">{item.email || '-'}</td>
                       <td className="py-3 pr-4 text-neutral-600">{item.phone || '-'}</td>
-                      <td className="py-3 pr-4 text-neutral-600">{formatDate((item as VendorWithDate).createdAt)}</td>
+                      <td className="py-3 pr-4 text-neutral-600">{(item as VendorWithDate).createdAt ? formatDate((item as VendorWithDate).createdAt!) : '-'}</td>
                       <td className="py-3">
                         <RowActions
                           onView={() => modal.openView(item)}

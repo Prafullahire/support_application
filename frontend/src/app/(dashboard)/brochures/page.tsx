@@ -177,7 +177,7 @@ export default function BrochuresPage() {
                     </td>
                     <td className="py-3 pr-4 text-neutral-600">{item.minStock}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.branch?.name || '-'}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate((item as BrochureWithDate).createdAt)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{(item as BrochureWithDate).createdAt ? formatDate((item as BrochureWithDate).createdAt!) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => modal.openView(item)}

@@ -166,7 +166,7 @@ export default function BranchesPage() {
                       <td className="py-3 pr-4">
                         <Badge status={item.isActive ? 'ACTIVE' : 'CANCELLED'} />
                       </td>
-                      <td className="py-3 pr-4 text-neutral-600">{formatDate((item as BranchWithDate).createdAt)}</td>
+                      <td className="py-3 pr-4 text-neutral-600">{(item as BranchWithDate).createdAt ? formatDate((item as BranchWithDate).createdAt!) : '-'}</td>
                       <td className="py-3">
                         <RowActions
                           onView={() => modal.openView(item)}

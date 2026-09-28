@@ -305,7 +305,7 @@ export default function UsersPage() {
                           ? item.officeLocation?.name || '-'
                           : item.department?.name || '-'}
                       </td>
-                      <td className="py-3 pr-4 text-neutral-600">{formatDate((item as UserWithDate).createdAt)}</td>
+                      <td className="py-3 pr-4 text-neutral-600">{(item as UserWithDate).createdAt ? formatDate((item as UserWithDate).createdAt!) : '-'}</td>
                       <td className="py-3">
                         <RowActions
                           onView={() => modal.openView(item)}
