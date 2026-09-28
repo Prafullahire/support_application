@@ -1,4 +1,4 @@
-import { AmcStatus } from '@prisma/client';
+import { AmcStatus } from '../../common/enums';
 import { IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAmcDto {

@@ -1,4 +1,4 @@
-import { AttendanceCorrectionType } from '@prisma/client';
+import { AttendanceCorrectionType } from '../../common/enums';
 import { IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateAttendanceCorrectionDto {

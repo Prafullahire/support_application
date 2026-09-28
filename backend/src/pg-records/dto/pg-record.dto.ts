@@ -1,4 +1,4 @@
-import { PgStatus } from '@prisma/client';
+import { PgStatus } from '../../common/enums';
 import { IsDateString, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePgRecordDto {

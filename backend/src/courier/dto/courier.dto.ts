@@ -1,4 +1,4 @@
-import { CourierStatus } from '@prisma/client';
+import { CourierStatus } from '../../common/enums';
 import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CreateCourierDto {

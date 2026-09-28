@@ -1,4 +1,4 @@
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus } from '../../common/enums';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CreateRequestDto {

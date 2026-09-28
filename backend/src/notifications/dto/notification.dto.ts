@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client';
+import { NotificationType } from '../../common/enums';
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CreateNotificationDto {

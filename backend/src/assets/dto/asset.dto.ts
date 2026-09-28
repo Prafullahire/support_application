@@ -1,4 +1,4 @@
-import { AssetStatus } from '@prisma/client';
+import { AssetStatus } from '../../common/enums';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateAssetDto {
