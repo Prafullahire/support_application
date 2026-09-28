@@ -11,12 +11,12 @@ export const ATTENDANCE_CORRECTION_TYPE_LABELS: Record<AttendanceCorrectionType,
   HOLIDAY: 'Holiday',
 };
 
-export function getAttendanceCorrectionTypeLabel(type: AttendanceCorrectionType): string {
-  return ATTENDANCE_CORRECTION_TYPE_LABELS[type] ?? type.replace(/_/g, ' ');
+export function getAttendanceCorrectionTypeLabel(type: AttendanceCorrectionType | string): string {
+  return (ATTENDANCE_CORRECTION_TYPE_LABELS as Record<string, string>)[type] ?? (type ? String(type).replace(/_/g, ' ') : '—');
 }
 
 export function mapCorrectionTypeToAttendanceStatus(
-  type: AttendanceCorrectionType,
+  type: AttendanceCorrectionType | string,
 ): AttendanceStatus {
   switch (type) {
     case AttendanceCorrectionType.PRESENT_FULL_DAY:

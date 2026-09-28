@@ -60,7 +60,7 @@ export class AttendanceCorrectionService {
       data: {
         attendanceId: dto.attendanceId,
         userId,
-        requestType: dto.requestType,
+        requestType: dto.requestType as any,
         comments: dto.comments.trim(),
       },
       include: this.requestInclude(),
@@ -134,7 +134,7 @@ export class AttendanceCorrectionService {
       this.prisma.attendanceCorrectionRequest.update({
         where: { id },
         data: {
-          status: AttendanceCorrectionStatus.APPROVED,
+          status: AttendanceCorrectionStatus.APPROVED as any,
           reviewedById: adminId,
           reviewedAt: new Date(),
           adminNotes: dto.adminNotes?.trim() || null,
@@ -144,8 +144,8 @@ export class AttendanceCorrectionService {
       this.prisma.officeBoyAttendance.update({
         where: { id: request.attendanceId },
         data: {
-          status: updatedStatus,
-          approvedCorrectionType: request.requestType,
+          status: updatedStatus as any,
+          approvedCorrectionType: request.requestType as any,
         },
       }),
     ]);
@@ -178,7 +178,7 @@ export class AttendanceCorrectionService {
     const updatedRequest = await this.prisma.attendanceCorrectionRequest.update({
       where: { id },
       data: {
-        status: AttendanceCorrectionStatus.REJECTED,
+        status: AttendanceCorrectionStatus.REJECTED as any,
         reviewedById: adminId,
         reviewedAt: new Date(),
         adminNotes: dto.adminNotes?.trim() || null,
@@ -270,9 +270,9 @@ export class AttendanceCorrectionService {
     id: string;
     attendanceId: string;
     userId: string;
-    requestType: Parameters<typeof getAttendanceCorrectionTypeLabel>[0];
+    requestType: any;
     comments: string;
-    status: AttendanceCorrectionStatus;
+    status: any;
     reviewedAt: Date | null;
     adminNotes: string | null;
     createdAt: Date;
@@ -284,7 +284,7 @@ export class AttendanceCorrectionService {
       logoutTime: Date | null;
       workingDurationMinutes: number | null;
       status: string;
-      approvedCorrectionType: Parameters<typeof getAttendanceCorrectionTypeLabel>[0] | null;
+      approvedCorrectionType?: any;
       branch: { id: string; name: string } | null;
       location: { id: string; name: string } | null;
     };
