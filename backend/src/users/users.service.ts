@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../common/enums';
 import {
   assertBranchAccess,
   canAssignRole,

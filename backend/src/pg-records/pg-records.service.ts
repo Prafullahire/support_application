@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PgStatus } from '@prisma/client';
+import { PgStatus } from '../common/enums';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePgRecordDto, UpdatePgRecordDto } from './dto/pg-record.dto';
 

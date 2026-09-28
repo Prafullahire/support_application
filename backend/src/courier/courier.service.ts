@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NotificationType, UserRole } from '@prisma/client';
+import { NotificationType, UserRole } from '../common/enums';
 import { isPrivilegedAdmin } from '../common/constants/roles.constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { StatusNotificationService } from '../notifications/status-notification.service';

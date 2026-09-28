@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AmcStatus } from '@prisma/client';
+import { AmcStatus } from '../common/enums';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAmcDto, UpdateAmcDto } from './dto/amc.dto';
 

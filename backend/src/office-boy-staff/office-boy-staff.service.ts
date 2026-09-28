@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../common/enums';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';

@@ -8,7 +8,7 @@ import {
   AttendanceCorrectionStatus,
   NotificationType,
   UserRole,
-} from '@prisma/client';
+} from '../common/enums';
 import { isPrivilegedAdmin } from '../common/constants/roles.constants';
 import { resolveBranchFilter, ScopedUser } from '../common/utils/branch-scope.util';
 import { PrismaService } from '../prisma/prisma.service';

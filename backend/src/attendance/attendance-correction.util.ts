@@ -1,7 +1,7 @@
 import {
   AttendanceCorrectionType,
   AttendanceStatus,
-} from '@prisma/client';
+} from '../common/enums';
 
 export const ATTENDANCE_CORRECTION_TYPE_LABELS: Record<AttendanceCorrectionType, string> = {
   PRESENT_FULL_DAY: 'Present (Full Day)',

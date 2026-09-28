@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../enums';
 
 export const ADMIN_ACCESS_ROLES: UserRole[] = [UserRole.ADMIN, UserRole.SUPER_ADMIN];
 

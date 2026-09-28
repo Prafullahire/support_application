@@ -1,5 +1,5 @@
 import { ForbiddenException } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../enums';
 import { isPrivilegedAdmin, isSuperAdmin } from '../constants/roles.constants';
 
 export interface ScopedUser {

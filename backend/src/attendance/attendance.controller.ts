@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AttendanceCorrectionStatus, UserRole } from '@prisma/client';
+import { AttendanceCorrectionStatus, UserRole } from '../common/enums';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { AdminRoles, Roles } from '../common/decorators/roles.decorator';

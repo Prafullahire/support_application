@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../common/enums';
 import { RequestsService } from './requests.service';
 import { CreateRequestDto, UpdateRequestDto } from './dto/request.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';

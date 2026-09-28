@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { AssetStatus } from '@prisma/client';
+import { AssetStatus } from '../common/enums';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   AssignAssetDto,

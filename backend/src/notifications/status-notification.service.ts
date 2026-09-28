@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NotificationType } from '@prisma/client';
+import { NotificationType } from '../common/enums';
 import { AuditService } from '../common/services/base.service';
 import { MailService } from '../mail/mail.service';
 import { PrismaService } from '../prisma/prisma.service';

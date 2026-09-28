@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../common/enums';
 import { MailService } from '../mail/mail.service';
 import { SmsService } from '../sms/sms.service';
 import { isSystemGeneratedEmail } from '../common/utils/contact.util';

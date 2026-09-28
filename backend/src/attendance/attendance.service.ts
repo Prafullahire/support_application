@@ -4,13 +4,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import {
   AttendanceActivityType,
   AttendanceCorrectionStatus,
   AttendanceStatus,
-  Prisma,
   UserRole,
-} from '@prisma/client';
+} from '../common/enums';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';

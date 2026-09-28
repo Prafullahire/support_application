@@ -22,7 +22,7 @@ import {
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { AmcStatus } from '@prisma/client';
+import { AmcStatus } from '../common/enums';
 
 import { AmcService } from './amc.service';
 

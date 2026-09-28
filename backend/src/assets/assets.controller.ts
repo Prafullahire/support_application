@@ -22,7 +22,7 @@ import {
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { AssetStatus } from '@prisma/client';
+import { AssetStatus } from '../common/enums';
 
 import { AssetsService } from './assets.service';
 

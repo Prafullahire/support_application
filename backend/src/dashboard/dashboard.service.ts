@@ -4,7 +4,7 @@ import {
   AssetStatus,
   RequestStatus,
   UserRole,
-} from '@prisma/client';
+} from '../common/enums';
 import { isPrivilegedAdmin } from '../common/constants/roles.constants';
 import { PrismaService } from '../prisma/prisma.service';
 

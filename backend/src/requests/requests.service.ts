@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { NotificationType, UserRole } from '@prisma/client';
+import { NotificationType, UserRole } from '../common/enums';
 import { isPrivilegedAdmin } from '../common/constants/roles.constants';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';

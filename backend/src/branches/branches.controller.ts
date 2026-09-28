@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../common/enums';
 import { BranchesService } from './branches.service';
 import { CreateBranchDto, UpdateBranchDto } from './dto/branch.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AmcStatus, AssetStatus, PgStatus, RequestStatus } from '@prisma/client';
+import { AmcStatus, AssetStatus, PgStatus, RequestStatus } from '../common/enums';
 import * as XLSX from 'xlsx';
 import { buildExpenseDateFilter, isValidQueryValue } from '../common/utils/query.util';
 import { PrismaService } from '../prisma/prisma.service';

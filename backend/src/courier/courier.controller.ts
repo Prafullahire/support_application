@@ -11,7 +11,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '../common/enums';
 import { CourierService } from './courier.service';
 import {
   CreateCourierDto,

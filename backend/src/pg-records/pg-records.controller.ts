@@ -22,7 +22,7 @@ import {
 
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { PgStatus } from '@prisma/client';
+import { PgStatus } from '../common/enums';
 
 import { PgRecordsService } from './pg-records.service';
 
