@@ -164,7 +164,7 @@ export default function RequestsPage() {
                     <td className="py-3 pr-4 text-neutral-600">
                       {item.createdBy ? `${item.createdBy.firstName} ${item.createdBy.lastName}` : '-'}
                     </td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.createdAt)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.createdAt ? formatDate(item.createdAt) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => modal.openView(item)}

@@ -356,7 +356,7 @@ export default function ExpensesPage() {
                     <td className="py-3 pr-4 text-neutral-600">{item.branch?.name || '-'}</td>
                     <td className="py-3 pr-4 text-neutral-600">{formatCurrency(item.amount)}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.category?.name || '-'}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.expenseDate)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.expenseDate ? formatDate(item.expenseDate) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => modal.openView(item)}

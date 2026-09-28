@@ -74,7 +74,7 @@ export default function AuditLogsPage() {
                       <td className="py-3 pr-4 text-neutral-600 max-w-[200px] truncate">
                         {item.details || '-'}
                       </td>
-                      <td className="py-3 pr-4 text-neutral-600">{formatDate(item.createdAt)}</td>
+                      <td className="py-3 pr-4 text-neutral-600">{item.createdAt ? formatDate(item.createdAt) : '-'}</td>
                       <td className="py-3">
                         <RowActions
                           onView={() => modal.openView(item)}

@@ -190,7 +190,7 @@ export default function PgRecordsPage() {
                     <td className="py-3 pr-4 text-neutral-600 max-w-[180px] truncate">{item.address}</td>
                     <td className="py-3 pr-4 text-neutral-600">{formatCurrency(item.rentAmount)}</td>
                     <td className="py-3 pr-4 text-neutral-600">
-                      {formatDate(item.agreementStart)} – {formatDate(item.agreementEnd)}
+                      {item.agreementStart ? formatDate(item.agreementStart) : '-'} – {item.agreementEnd ? formatDate(item.agreementEnd) : '-'}
                     </td>
                     <td className="py-3 pr-4 text-neutral-600">
                       {item.reminderDays ?? 5} days before

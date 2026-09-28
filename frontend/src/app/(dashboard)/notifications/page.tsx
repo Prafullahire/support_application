@@ -112,7 +112,7 @@ export default function NotificationsPage() {
                     </td>
                     <td className="py-3 pr-4"><Badge status={item.type} /></td>
                     <td className="py-3 pr-4 text-neutral-600">{item.isRead ? 'Yes' : 'No'}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.createdAt)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.createdAt ? formatDate(item.createdAt) : '-'}</td>
                     <td className="py-3">
                       <div className="flex items-center gap-2">
                         <RowActions

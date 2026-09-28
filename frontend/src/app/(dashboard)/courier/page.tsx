@@ -208,7 +208,7 @@ export default function CourierPage() {
                       {item.pickupDate ? formatDate(item.pickupDate) : '-'}
                     </td>
                     <td className="py-3 pr-4"><Badge status={item.status} /></td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.createdAt)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.createdAt ? formatDate(item.createdAt) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => modal.openView(item)}

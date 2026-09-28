@@ -290,7 +290,7 @@ export default function JoiningKitPage() {
                     <td className="py-3 pr-4">
                       <Badge status={item.isActive !== false ? 'ACTIVE' : 'CANCELLED'} />
                     </td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.createdAt)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.createdAt ? formatDate(item.createdAt) : '-'}</td>
                     <td className="py-3">
                       <RowActions
                         onView={() => itemModal.openView(item)}

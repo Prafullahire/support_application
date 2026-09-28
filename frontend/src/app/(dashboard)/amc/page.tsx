@@ -170,8 +170,8 @@ export default function AmcPage() {
                   <tr key={item.id} className="border-b border-neutral-100">
                     <td className="py-3 pr-4 font-medium text-black">{item.title}</td>
                     <td className="py-3 pr-4 text-neutral-600">{item.vendor?.name || '-'}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.startDate)}</td>
-                    <td className="py-3 pr-4 text-neutral-600">{formatDate(item.endDate)}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.startDate ? formatDate(item.startDate) : '-'}</td>
+                    <td className="py-3 pr-4 text-neutral-600">{item.endDate ? formatDate(item.endDate) : '-'}</td>
                     <td className="py-3 pr-4 text-neutral-600">
                       {item.amount ? formatCurrency(item.amount) : '-'}
                     </td>
