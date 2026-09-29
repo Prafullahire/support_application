@@ -6,11 +6,11 @@
       "use": "@vercel/next"
     },
     {
-      "src": "backend/api/index.ts",
+      "src": "backend/api/index.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "backend/src/**",
+          "backend/dist/**",
           "backend/prisma/**",
           "backend/node_modules/.prisma/client/**",
           "backend/node_modules/@prisma/client/**",
@@ -22,11 +22,11 @@
   "rewrites": [
     {
       "source": "/api/backend/(.*)",
-      "destination": "/backend/api/index.ts"
+      "destination": "/backend/api/index.js"
     },
     {
       "source": "/api/v1/(.*)",
-      "destination": "/backend/api/index.ts"
+      "destination": "/backend/api/index.js"
     },
     {
       "source": "/(.*)",
