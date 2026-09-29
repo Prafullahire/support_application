@@ -93,7 +93,7 @@ export class UsersService {
       select: this.select(),
     });
 
-    void this.welcomeNotificationService.sendWelcomeNotifications(user).catch(() => undefined);
+    void this.welcomeNotificationService.sendWelcomeNotifications(user as any).catch(() => undefined);
 
     return user;
   }
@@ -110,7 +110,7 @@ export class UsersService {
 
     const nextRole = dto.role ?? existing.role;
 
-    if (actor && dto.role && !canAssignRole(actor, nextRole)) {
+    if (actor && dto.role && !canAssignRole(actor, nextRole as any)) {
       throw new ForbiddenException('You cannot assign this role');
     }
 

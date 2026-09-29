@@ -178,7 +178,7 @@ export class AuthService {
       };
     }
 
-    if (!isPrivilegedAdmin(user.role)) {
+    if (!isPrivilegedAdmin(user.role as any)) {
       throw new BadRequestException('Password reset is only available for admin accounts.');
     }
 
@@ -251,7 +251,7 @@ export class AuthService {
       !resetToken ||
       resetToken.usedAt ||
       resetToken.expiresAt < new Date() ||
-      !isPrivilegedAdmin(resetToken.user.role) ||
+      !isPrivilegedAdmin(resetToken.user.role as any) ||
       !resetToken.user.isActive
     ) {
       throw new BadRequestException('Invalid or expired reset link. Please request a new one.');

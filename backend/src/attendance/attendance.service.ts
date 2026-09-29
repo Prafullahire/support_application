@@ -620,7 +620,7 @@ export class AttendanceService {
     loginDistanceMeters: number | null;
     logoutDistanceMeters: number | null;
     workingDurationMinutes: number | null;
-    status: AttendanceStatus;
+    status: any;
     isLate?: boolean;
     lateReason?: string | null;
     isEarlyLeave?: boolean;
