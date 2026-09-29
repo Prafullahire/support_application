@@ -6,14 +6,15 @@
       "use": "@vercel/next"
     },
     {
-      "src": "backend/dist/api/index.js",
+      "src": "backend/api/index.ts",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
           "backend/src/**",
           "backend/prisma/**",
           "backend/node_modules/.prisma/client/**",
-          "backend/node_modules/@prisma/client/**"
+          "backend/node_modules/@prisma/client/**",
+          "backend/node_modules/reflect-metadata/**"
         ]
       }
     }
@@ -21,11 +22,11 @@
   "rewrites": [
     {
       "source": "/api/backend/(.*)",
-      "destination": "/backend/dist/api/index.js"
+      "destination": "/backend/api/index.ts"
     },
     {
       "source": "/api/v1/(.*)",
-      "destination": "/backend/dist/api/index.js"
+      "destination": "/backend/api/index.ts"
     },
     {
       "source": "/(.*)",
