@@ -635,7 +635,7 @@ export class AttendanceService {
       id: string;
       requestType: string;
       comments: string;
-      status: AttendanceCorrectionStatus;
+      status: any;
       adminNotes?: string | null;
       createdAt: Date;
     }>;
