@@ -1,16 +1,19 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
+import * as express from 'express';
 
-const server = express();
+const expressApp = express();
+let app: any;
 
-async function createNestServer(expressInstance: express.Express) {
-  const app = await NestFactory.create(
+async function bootstrap() {
+  const logger = new Logger('Serverless');
+  logger.log('Bootstrapping NestJS...');
+  app = await NestFactory.create(
     AppModule,
-    new ExpressAdapter(expressInstance),
-    { logger: ['error', 'warn'] },
+    new ExpressAdapter(expressApp),
+    { logger: ['error', 'warn', 'log'] },
   );
 
   app.enableCors({
@@ -29,16 +32,13 @@ async function createNestServer(expressInstance: express.Express) {
   );
 
   await app.init();
-  return app;
+  logger.log('NestJS initialized successfully.');
 }
-
-let isReady = false;
 
 export default async function handler(req: any, res: any) {
   try {
-    if (!isReady) {
-      await createNestServer(server);
-      isReady = true;
+    if (!app) {
+      await bootstrap();
     }
 
     if (req.url) {
@@ -49,7 +49,7 @@ export default async function handler(req: any, res: any) {
       }
     }
 
-    server(req, res);
+    expressApp(req, res);
   } catch (err: any) {
     console.error('Serverless Handler Error:', err);
     if (!res.headersSent) {
