@@ -6,19 +6,41 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
 const expressApp = express();
-let app: any;
+
+let app: any = null;
+let bootstrapPromise: Promise<any> | null = null;
 
 async function bootstrap() {
-  const logger = new Logger('Serverless');
-  logger.log('Bootstrapping NestJS...');
+  const logger = new Logger('Vercel');
+
+  logger.log('Starting NestJS serverless application...');
+
+  logger.log(
+    `DATABASE_URL exists: ${Boolean(process.env.DATABASE_URL)}`,
+  );
+
+  logger.log(
+    `DIRECT_URL exists: ${Boolean(process.env.DIRECT_URL)}`,
+  );
+
+  logger.log(
+    `JWT_SECRET exists: ${Boolean(process.env.JWT_SECRET)}`,
+  );
+
+  const frontendUrl =
+    process.env.FRONTEND_URL ||
+    'http://localhost:3000';
+
   app = await NestFactory.create(
     AppModule,
     new ExpressAdapter(expressApp),
-    { logger: ['error', 'warn', 'log'] },
+    {
+      logger: ['error', 'warn', 'log'],
+    },
   );
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || '*',
+    origin: frontendUrl,
     credentials: true,
   });
 
@@ -33,33 +55,84 @@ async function bootstrap() {
   );
 
   await app.init();
+
   logger.log('NestJS initialized successfully.');
+
+  return app;
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(
+  req: any,
+  res: any,
+) {
   try {
     if (!app) {
-      await bootstrap();
+      if (!bootstrapPromise) {
+        bootstrapPromise = bootstrap().catch((error) => {
+          bootstrapPromise = null;
+          throw error;
+        });
+      }
+
+      await bootstrapPromise;
     }
+
+    console.log(
+      'Original request URL:',
+      req.url,
+    );
 
     if (req.url) {
       if (req.url.startsWith('/api/backend')) {
-        req.url = req.url.replace('/api/backend', '');
-      } else if (req.url.startsWith('/backend/api')) {
-        req.url = req.url.replace('/backend/api', '');
-      } else if (req.url.startsWith('/backend/dist/api')) {
-        req.url = req.url.replace('/backend/dist/api', '');
+        req.url = req.url.replace(
+          '/api/backend',
+          '',
+        );
+      } else if (
+        req.url.startsWith('/backend/api')
+      ) {
+        req.url = req.url.replace(
+          '/backend/api',
+          '',
+        );
+      } else if (
+        req.url.startsWith('/backend/dist/api')
+      ) {
+        req.url = req.url.replace(
+          '/backend/dist/api',
+          '',
+        );
       }
     }
 
-    expressApp(req, res);
-  } catch (err: any) {
-    console.error('Serverless Handler Error:', err);
+    console.log(
+      'Normalized request URL:',
+      req.url,
+    );
+
+    return expressApp(req, res);
+  } catch (error: any) {
+    console.error(
+      '========== SERVERLESS ERROR ==========',
+    );
+
+    console.error(error);
+    console.error('Message:', error?.message);
+    console.error('Stack:', error?.stack);
+
+    console.error(
+      '======================================',
+    );
+
     if (!res.headersSent) {
-      res.status(500).json({
+      return res.status(500).json({
+        success: false,
         error: 'Backend Serverless Error',
-        message: err?.message || String(err),
-        stack: err?.stack,
+        message:
+          process.env.NODE_ENV === 'production'
+            ? 'Internal server error'
+            : error?.message ||
+            String(error),
       });
     }
   }

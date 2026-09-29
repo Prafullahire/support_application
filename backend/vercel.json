@@ -2,17 +2,28 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.ts",
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "backend/api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["src/**", "prisma/**"]
+        "includeFiles": [
+          "backend/src/**",
+          "backend/prisma/**"
+        ]
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "api/index.ts"
+      "source": "/api/backend/(.*)",
+      "destination": "/backend/api/index.ts"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ]
 }
