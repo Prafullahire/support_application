@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
-import { AppModule } from '../app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 
@@ -13,7 +12,13 @@ let bootstrapPromise: Promise<any> | null = null;
 async function bootstrap() {
   const logger = new Logger('Vercel');
 
-  logger.log('Starting NestJS serverless application...');
+  logger.log('======================================');
+  logger.log('Starting NestJS serverless function');
+  logger.log('======================================');
+
+  logger.log(
+    `NODE_ENV: ${process.env.NODE_ENV || 'not-set'}`,
+  );
 
   logger.log(
     `DATABASE_URL exists: ${Boolean(process.env.DATABASE_URL)}`,
@@ -27,9 +32,22 @@ async function bootstrap() {
     `JWT_SECRET exists: ${Boolean(process.env.JWT_SECRET)}`,
   );
 
-  const frontendUrl =
-    process.env.FRONTEND_URL ||
-    'http://localhost:3000';
+  logger.log(
+    `FRONTEND_URL exists: ${Boolean(process.env.FRONTEND_URL)}`,
+  );
+
+  /*
+   * IMPORTANT:
+   * Load AppModule dynamically so module/import errors
+   * can be caught and logged by our try/catch.
+   */
+  logger.log('Loading AppModule...');
+
+  const { AppModule } = await import('../app.module');
+
+  logger.log('AppModule loaded successfully.');
+
+  logger.log('Creating NestJS application...');
 
   app = await NestFactory.create(
     AppModule,
@@ -38,6 +56,12 @@ async function bootstrap() {
       logger: ['error', 'warn', 'log'],
     },
   );
+
+  logger.log('NestJS application created.');
+
+  const frontendUrl =
+    process.env.FRONTEND_URL ||
+    'http://localhost:3000';
 
   app.enableCors({
     origin: frontendUrl,
@@ -54,9 +78,13 @@ async function bootstrap() {
     }),
   );
 
+  logger.log('Initializing NestJS...');
+
   await app.init();
 
-  logger.log('NestJS initialized successfully.');
+  logger.log('======================================');
+  logger.log('NestJS initialized successfully');
+  logger.log('======================================');
 
   return app;
 }
@@ -66,6 +94,16 @@ export default async function handler(
   res: any,
 ) {
   try {
+    console.log('======================================');
+    console.log('SERVERLESS REQUEST START');
+    console.log('======================================');
+
+    console.log('Method:', req.method);
+    console.log('Original URL:', req.url);
+
+    /*
+     * Bootstrap NestJS.
+     */
     if (!app) {
       if (!bootstrapPromise) {
         bootstrapPromise = bootstrap().catch((error) => {
@@ -77,11 +115,15 @@ export default async function handler(
       await bootstrapPromise;
     }
 
-    console.log(
-      'Original request URL:',
-      req.url,
-    );
-
+    /*
+     * Normalize Vercel rewrite path.
+     *
+     * Public request:
+     * /api/backend/api/v1/...
+     *
+     * NestJS should receive:
+     * /api/v1/...
+     */
     if (req.url) {
       if (req.url.startsWith('/api/backend')) {
         req.url = req.url.replace(
@@ -106,34 +148,47 @@ export default async function handler(
     }
 
     console.log(
-      'Normalized request URL:',
+      'Normalized URL:',
       req.url,
     );
 
+    console.log('Sending request to NestJS...');
+
     return expressApp(req, res);
   } catch (error: any) {
-    console.error(
-      '========== SERVERLESS ERROR ==========',
-    );
-
-    console.error(error);
-    console.error('Message:', error?.message);
-    console.error('Stack:', error?.stack);
+    console.error('======================================');
+    console.error('SERVERLESS FUNCTION ERROR');
+    console.error('======================================');
 
     console.error(
-      '======================================',
+      'Error name:',
+      error?.name,
     );
+
+    console.error(
+      'Error message:',
+      error?.message,
+    );
+
+    console.error(
+      'Error stack:',
+      error?.stack,
+    );
+
+    console.error('Full error:', error);
+
+    console.error('======================================');
 
     if (!res.headersSent) {
       return res.status(500).json({
         success: false,
         error: 'Backend Serverless Error',
         message:
-          process.env.NODE_ENV === 'production'
-            ? 'Internal server error'
-            : error?.message ||
-            String(error),
+          error?.message ||
+          'Unknown serverless error',
       });
     }
+
+    return;
   }
 }
