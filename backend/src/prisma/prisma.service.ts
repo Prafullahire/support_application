@@ -6,12 +6,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   private readonly logger = new Logger(PrismaService.name);
 
   async onModuleInit() {
-    try {
-      await this.$connect();
-      this.logger.log('Database connected successfully.');
-    } catch (error) {
-      this.logger.error('Database connection error in onModuleInit:', error);
-    }
+    this.logger.log('Prisma initialized. Connection will be established lazily.');
   }
 
   async onModuleDestroy() {
