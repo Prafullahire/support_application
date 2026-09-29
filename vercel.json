@@ -20,16 +20,12 @@
   ],
   "rewrites": [
     {
-      "source": "/api/backend/(.*)",
+      "source": "/api/backend/:path*",
       "destination": "/backend/api/index.ts"
     },
     {
-      "source": "/api/v1/(.*)",
-      "destination": "/backend/api/index.ts"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "source": "/:path*",
+      "destination": "/frontend/:path*"
     }
   ]
 }
